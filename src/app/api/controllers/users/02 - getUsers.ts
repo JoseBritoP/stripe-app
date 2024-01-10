@@ -66,3 +66,26 @@ export const getUsers = async () => {
   const cleanUsers = userFormat(users)
   return cleanUsers
 };
+
+export const getUser = async(userId:string) => {
+  const user = await prisma.user.findUnique({
+    where:{
+      id:+userId
+    },
+    select: {
+      id: true,
+      email: true,
+      posts: {
+        select: {
+          id: true,
+          title: true,
+          content:true
+        },
+      },
+    },
+  });
+
+  if(!user) throw new Error(`The user id ${userId} don't exist`);
+
+  return user
+};
