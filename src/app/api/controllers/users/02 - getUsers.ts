@@ -89,3 +89,35 @@ export const getUser = async(userId:string) => {
 
   return user
 };
+
+export const getUsersByEmail = async(email:string) => {
+
+  const users = await prisma.user.findMany({
+    where:{
+      email:{
+        contains:email,
+        mode:'insensitive'
+      }
+    },
+    select:{
+      id:true,
+      email:true,
+      posts:{
+        select:{
+          id:true,
+          title:true,
+          content:true,
+          category:{
+            select:{
+              id:true,
+              name:true
+            }
+          }
+        },
+      }
+    }
+  });
+
+  const cleanUsers = userFormat(users);
+  return cleanUsers;
+};
