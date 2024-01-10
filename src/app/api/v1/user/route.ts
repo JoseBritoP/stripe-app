@@ -1,8 +1,13 @@
 import { NextResponse,NextRequest } from "next/server";
-import { createUser } from "../../controllers/users";
+import { createUser,getUsers } from "../../controllers/users";
 
 export async function GET(req:NextRequest){
-  return NextResponse.json({DIY:'All users'})
+  try {
+    const users = await getUsers();
+    return NextResponse.json(users,{status:200})
+  } catch (error:any) {
+    return NextResponse.json({error:error.message},{status:400,statusText:'Bad request'})
+  }
 };
 
 export async function POST (req:NextRequest){
