@@ -3,6 +3,7 @@ import { PostInfo } from "../../interfaces/post";
 
 const postFormat = (posts:PostInfo[]) => {
   return posts.map((post)=>{
+    console.log(post)
     const { id, title, content, category } = post
     const { email } = post.user;
     return {
