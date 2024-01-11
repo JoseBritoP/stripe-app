@@ -78,3 +78,63 @@ export const getPostByTitle = async (title:string) => {
   const cleanPosts = postFormat(posts);
   return cleanPosts
 };
+
+export const getPost = async(postId:string) => {
+  const post = await prisma.post.findUnique({
+    where:{
+      id:+postId
+    },
+    select:{
+      id:true,
+      title:true,
+      content:true,
+      category:{
+        select:{
+          id:true,
+          name:true
+        }
+      }
+    }
+  });
+
+  if(!post) throw new Error('No se encontró el post');
+
+  return post
+};
+
+export const getPostByPage = async (page:number=1) => {
+
+  const pageNumber = Math.max(1, Math.floor(page));
+
+  const postsPerPage = 2;
+
+  const postSkipped = (pageNumber - 1) * postsPerPage;
+
+  const posts = await prisma.post.findMany({
+    skip:postSkipped,
+    take: postsPerPage,
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      user: {
+        select: {
+          email: true,
+        },
+      },
+      category:{
+        select:{
+          id:true,
+          name:true
+        }
+      }
+    },
+    orderBy:{
+      title:"asc"
+    }
+  });
+  
+  if(!posts.length) throw new Error(`No posts found`)
+  const cleanPosts =  postFormat(posts)
+  return cleanPosts
+};
