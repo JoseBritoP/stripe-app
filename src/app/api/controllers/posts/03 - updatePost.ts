@@ -62,7 +62,7 @@ export const updatePostInfoCategories = async({postId,data}:UpdatePostV2) => {
   if(!postToUpdate) throw new Error(`n error has ocurred updating the post`);
 
   return {
-    message:'Post patched',
+    message:'Post categories patched',
     postToUpdate
   };
 };
