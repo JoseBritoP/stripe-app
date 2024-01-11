@@ -16,7 +16,7 @@ const postFormat = (posts:PostInfo[]) => {
 }
 
 
-export const getAllPosts = async() => {
+export const getPosts = async() => {
 
   const posts = await prisma.post.findMany({
     select: {
@@ -43,5 +43,38 @@ export const getAllPosts = async() => {
   if(!posts.length) throw new Error(`No posts`);
   const cleanPosts = postFormat(posts);
   return cleanPosts
-  // return posts;
+};
+
+export const getPostByTitle = async (title:string) => {
+  const posts = await prisma.post.findMany({
+    where:{
+      title:{
+        contains: title,
+        mode: "insensitive"
+      }
+    },
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      user: {
+        select: {
+          email: true,
+        },
+      },
+      category:{
+        select:{
+          id:true,
+          name:true
+        }
+      }
+    },
+    orderBy:{
+      createAt:'asc'
+    }
+  });
+
+  if(!posts.length) throw new Error(`No posts with the title ${title}`);
+  const cleanPosts = postFormat(posts);
+  return cleanPosts
 };
