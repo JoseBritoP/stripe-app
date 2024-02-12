@@ -5,13 +5,13 @@ interface Props {
 }
 
 const categoryExist = async (name:string) => {
-  const existingCategory = await prisma.category.findMany({
+  const existingCategory = await prisma.category.findUnique({
     where: {
       name,
     },
   });
 
-  if(existingCategory.length !== 0 ) throw new Error(`La categoría ${name} ya existe`)
+  if(existingCategory) throw new Error(`La categoría ${name} ya existe`)
 
 };
 
