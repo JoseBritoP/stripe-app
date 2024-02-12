@@ -1,32 +1,49 @@
 import { prisma } from "@/app/config/db";
 import { NewUser } from "@/app/api/interfaces/user";
+import { bycrypt } from "../../utils/bycript.handler";
 
 
-const userExist = async (email:string) => {
-  const user = await prisma.user.findMany({
+const userExist = async (email:string,username:string) => {
+  // const userEmail = await prisma.user.findMany({
+  //   where:{
+  //     email
+  //   }
+  // });
+  const userEmail = await prisma.user.findUnique({
     where:{
       email
     }
   });
 
-  if(user.length > 0) throw new Error(`The user ${email} already exist`);
+  const userUsername = await prisma.user.findUnique({
+    where:{
+      username
+    }
+  })
+
+  if(userEmail || userUsername) throw new Error(`The userdata already exist`)
+  // if(userEmail.length > 0) throw new Error(`The user ${email} already exist`);
 
 };
 
-export const createUser = async ({email}:NewUser) => {
+export const createUser = async ({username,email,password}:NewUser) => {
 
-  await userExist(email);
+  await userExist(email,username);
+
+  const passwordHash = await bycrypt(password)
 
   const newUser = await prisma.user.create({
     data:{
-      email
+      username,
+      email,
+      password:passwordHash
     }
   });
 
   if(!newUser) throw new Error(`No se pudo crear el usuario de nombre ${email}`);
 
   return {
-    message: 'Usuario creado',
+    message: 'User created successfully',
     newUser
   }
 };
