@@ -1,5 +1,5 @@
 import { createUser } from "./01 - createUser"
-import { getUsers } from "./02 - getUsers"
+import { getUsers,getUser,getUserByUsername,getUsersByEmail } from "./02 - getUsers"
 export {
-  createUser,getUsers
+  createUser,getUsers,getUser,getUserByUsername,getUsersByEmail
 }

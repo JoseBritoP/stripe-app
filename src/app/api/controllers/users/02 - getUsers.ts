@@ -2,6 +2,7 @@ import { prisma } from "@/app/config/db";
 
 interface UserInfo {
   id:number
+  username:string
   email:string
   posts:{
     id:number,
@@ -17,17 +18,17 @@ interface UserInfo {
 
 const userFormat = (users:UserInfo[]) => {
   return users.map((user)=>{
-    const { id,email,posts} = user;
+    const { id, username , email , posts } = user;
     return {
       id,
+      username,
       email,
-      posts: !posts.length ? 'No tiene publicaciones' : posts.map((post)=>{
-        console.log(post)
+      posts: !posts.length ? 'No posts' : posts.map((post)=>{
         return {
           id:post.id,
           title:post.title,
           content:post.content,
-          category: !post.category.length ? 'No tiene categorías' : post.category,
+          category: !post.category.length ? 'No categories' : post.category,
         }
       })
     }
@@ -38,12 +39,14 @@ export const getUsers = async () => {
   const users = await prisma.user.findMany({
     select: {
       id: true,
+      username:true,
       email: true,
       posts: {
         select: {
           id: true,
           title: true,
           content: true,
+          createAt:true,
           category: {
             select: {
               id: true,
@@ -59,9 +62,9 @@ export const getUsers = async () => {
     },
   });
 
-  console.log(users[0].posts)
  
   if(!users.length) throw new Error('No hay usuarios');
+  // return users
 
   const cleanUsers = userFormat(users)
   return cleanUsers
@@ -91,7 +94,6 @@ export const getUser = async(userId:string) => {
 };
 
 export const getUsersByEmail = async(email:string) => {
-
   const users = await prisma.user.findMany({
     where:{
       email:{
@@ -118,6 +120,49 @@ export const getUsersByEmail = async(email:string) => {
     }
   });
 
+  if(!users.length) throw new Error(`Don't exist users with ${email}`)
+  
   const cleanUsers = userFormat(users);
   return cleanUsers;
+};
+
+export const getUserByUsername = async(username:string) => {
+  
+  const users = await prisma.user.findMany({
+    where:{
+      email:{
+        contains:username,
+        mode:'insensitive'
+      }
+    },
+    select:{
+      id:true,
+      email:true,
+      posts:{
+        select:{
+          id:true,
+          title:true,
+          content:true,
+          category:{
+            select:{
+              id:true,
+              name:true
+            }
+          }
+        },
+      }
+    }
+  });
+
+  if(!users.length) throw new Error(`Don't exist users with ${username}`)
+  
+  const cleanUsers = userFormat(users);
+  return cleanUsers;
+};
+
+export const getUserByQuery = async(username:string | undefined, email:string|undefined) => {
+
+  const users = username ? await getUserByUsername(username) : email ? await getUsersByEmail(email) : null;
+
+  return users
 };
