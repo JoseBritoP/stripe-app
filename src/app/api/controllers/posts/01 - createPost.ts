@@ -14,8 +14,8 @@ export const createPost = async(data:NewPost) => {
 
   const newPost = await prisma.post.create({
     data:{
-      title:data.title,
-      content:data.content,
+      title:data.title.trim(),
+      content:data.content.trim(),
       userId:+data.userId
     }
   });
@@ -23,7 +23,7 @@ export const createPost = async(data:NewPost) => {
   if(!newPost) throw new Error(`An error to create a post`);
 
   return {
-    message:'Post created',
+    message:'Post created successfully',
     newPost
   }
 };
@@ -41,14 +41,14 @@ export const createPostWithCategories = async (data:NewPostV2) => {
         id:category
       }
     });
-    if(!categoryBD) throw new Error('La categoría no existe')
+    if(!categoryBD) throw new Error(`The category don't exist`)
   })
   await Promise.all(categoriesInDB)
 
   const newPost = await prisma.post.create({
     data:{
-      title:data.title,
-      content:data.content,
+      title:data.title.trim(),
+      content:data.content.trim(),
       userId:+data.userId,
       category: {
         connect: categoriesToConnect,
@@ -56,13 +56,13 @@ export const createPostWithCategories = async (data:NewPostV2) => {
     },
     include:{
       category:true
-    }
+    },
   }) 
-  if(!newPost) throw new Error('Error al crear el post con categorías');
 
+  if(!newPost) throw new Error('An error ocurred creating a post with categories');
+  const {id,title,content,userId,category} = newPost;
   return {
-    message:'Post creado',
+    message:'Post created successfully',
     newPost
   }
-
 };
