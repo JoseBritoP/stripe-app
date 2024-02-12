@@ -19,6 +19,8 @@ model User {
   deleted Boolean@default(false)
   // Relación 1-n con Posts
   posts  Post[]
+  // Relation m-n con Post
+  favorites Favorite[]
 }
 
 model Post {
@@ -32,6 +34,9 @@ model Post {
    // Relación m-n con Categorías
   createAt DateTime @default(now())
   category  Category[]
+  // Relation m-n con User
+  favorites  Favorite[]
+
 }
 
 model Category {
@@ -39,4 +44,13 @@ model Category {
   name   String     @unique
   // Relación m-n con Posts
   posts    Post[]
+}
+
+model Favorite {
+  user         User      @relation(fields: [userId], references: [id])
+  userId       Int
+  post         Post      @relation(fields: [postId],references: [id])
+  postId       Int
+  createdAt   DateTime  @default(now())
+  @@id([userId, postId])
 }
