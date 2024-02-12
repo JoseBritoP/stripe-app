@@ -137,6 +137,7 @@ export const getUserByUsername = async(username:string) => {
     },
     select:{
       id:true,
+      username:true,
       email:true,
       posts:{
         select:{
