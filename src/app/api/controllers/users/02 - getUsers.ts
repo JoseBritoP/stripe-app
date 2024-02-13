@@ -8,7 +8,7 @@ interface UserInfo {
     id:number,
     title:string,
     content:string,
-    createAt:string,
+    createAt?:Date,
     category:{
       id:number
       name:string
@@ -64,7 +64,7 @@ export const getUsers = async () => {
 
  
   if(!users.length) throw new Error('No hay usuarios');
-  // return users
+  return users
 
   const cleanUsers = userFormat(users)
   return cleanUsers
@@ -103,6 +103,7 @@ export const getUsersByEmail = async(email:string) => {
     },
     select:{
       id:true,
+      username:true,
       email:true,
       posts:{
         select:{
