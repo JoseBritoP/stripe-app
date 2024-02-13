@@ -19,6 +19,7 @@ export interface PostInfo {
   content:string
   user:{
     email:string
+    username:string
   },
   category: Category[]
 }

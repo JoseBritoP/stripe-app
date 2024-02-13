@@ -3,14 +3,13 @@ import { PostInfo } from "../../interfaces/post";
 
 const postFormat = (posts:PostInfo[]) => {
   return posts.map((post)=>{
-    console.log(post)
     const { id, title, content, category } = post
-    const { email } = post.user;
+    const { username } = post.user;
     return {
       id:id,
       title:title,
       content:content,
-      author: email,
+      author: username,
       categories: !category.length ? 'No categories' : category
     }
   })
@@ -26,7 +25,8 @@ export const getPosts = async() => {
       content: true,
       user: {
         select: {
-          email: true,
+          username: true,
+          email:true,
         },
       },
       category:{
@@ -60,7 +60,8 @@ export const getPostByTitle = async (title:string) => {
       content: true,
       user: {
         select: {
-          email: true,
+          username: true,
+          email:true,
         },
       },
       category:{
@@ -120,6 +121,7 @@ export const getPostByPage = async (page:number=1) => {
       content: true,
       user: {
         select: {
+          username:true,
           email: true,
         },
       },
@@ -137,5 +139,39 @@ export const getPostByPage = async (page:number=1) => {
   
   if(!posts.length) throw new Error(`No posts found`)
   const cleanPosts =  postFormat(posts)
+  return cleanPosts
+};
+
+export const getPostsByCategory = async (category:string[]) => {
+  const posts = await prisma.post.findMany({
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      user: {
+        select: {
+          username: true,
+          email:true,
+        },
+      },
+      category: true,
+    },
+    where: {
+      category: {
+        some: {
+          name: {
+            contains: category[0],
+            mode:'insensitive'
+          },
+        },
+      },
+    },
+    orderBy: {
+      createAt: 'asc',
+    },
+  });
+
+  if(!posts.length) throw new Error(`No posts with category ${category}`);
+  const cleanPosts = postFormat(posts);
   return cleanPosts
 };
