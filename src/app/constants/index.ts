@@ -11,6 +11,10 @@ export const navbarLinks = [
     route:'/about',
     label:'About Us'
   },
+  {
+    route:'/posts',
+    label:'Posts'
+  }
 ]
 
 export const navbarLinksLogin = [
@@ -31,3 +35,18 @@ export const navbarLinksLogin = [
     label:'Create Post'
   },
 ]
+
+export const navbarPost = [
+  {
+    route:'/',
+    label:'Posts'
+  },
+  {
+    route:'/newpost',
+    label:'Create Post'
+  },
+  {
+    route:'/favorites',
+    label:'Favorites'
+  }
+];
