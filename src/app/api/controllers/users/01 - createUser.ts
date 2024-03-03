@@ -2,13 +2,8 @@ import { prisma } from "@/app/config/db";
 import { NewUser } from "@/app/api/interfaces/user";
 import { bycrypt } from "../../utils/bycript.handler";
 
-
 const userExist = async (email:string,username:string) => {
-  // const userEmail = await prisma.user.findMany({
-  //   where:{
-  //     email
-  //   }
-  // });
+
   const userEmail = await prisma.user.findUnique({
     where:{
       email
@@ -22,7 +17,6 @@ const userExist = async (email:string,username:string) => {
   })
 
   if(userEmail || userUsername) throw new Error(`The userdata already exist`)
-  // if(userEmail.length > 0) throw new Error(`The user ${email} already exist`);
 
 };
 
