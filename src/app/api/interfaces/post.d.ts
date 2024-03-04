@@ -18,6 +18,7 @@ export interface PostInfo {
   title:string
   content:string
   user:{
+    id:number,
     email:string
     username:string
   },

@@ -3,13 +3,16 @@ import { PostInfo } from "../../interfaces/post";
 
 const postFormat = (posts:PostInfo[]) => {
   return posts.map((post)=>{
-    const { id, title, content, category } = post
-    const { username } = post.user;
+    const { id, title, content, category, user } = post
+    // const { username } = post.user;
     return {
       id:id,
       title:title,
       content:content,
-      author: username,
+      author: {
+        id:user.id,
+        username:user.username
+      },
       categories: !category.length ? 'No categories' : category
     }
   })
@@ -25,6 +28,7 @@ export const getPosts = async() => {
       content: true,
       user: {
         select: {
+          id:true,
           username: true,
           email:true,
         },
@@ -60,6 +64,7 @@ export const getPostByTitle = async (title:string) => {
       content: true,
       user: {
         select: {
+          id:true,
           username: true,
           email:true,
         },
@@ -90,12 +95,19 @@ export const getPost = async(postId:string) => {
       id:true,
       title:true,
       content:true,
+      user:{
+        select:{
+          id:true,
+          username:true,
+          email:true
+        }
+      },
       category:{
         select:{
           id:true,
           name:true
         }
-      }
+      },
     }
   });
 
@@ -121,6 +133,7 @@ export const getPostByPage = async (page:number=1) => {
       content: true,
       user: {
         select: {
+          id:true,
           username:true,
           email: true,
         },
@@ -150,6 +163,7 @@ export const getPostsByCategory = async (category:string[]) => {
       content: true,
       user: {
         select: {
+          id:true,
           username: true,
           email:true,
         },
