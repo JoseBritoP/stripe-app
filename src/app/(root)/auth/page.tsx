@@ -19,7 +19,7 @@ export default function Page() {
         <LoginForm/>
       </div>
       ) : (
-        <div className='flex flex-col w-full justify-center items-center p-2 bg-slate-50'>
+        <div className='flex flex-col w-full justify-center items-center p-2'>
         <h1 className='text-white font-semibold text-xl text-center mb-4'>Register</h1>
         <button onClick={handleLoginChange} className='text-white bg-sky-800 hover:bg-sky-700 transition duration-200 ease-in text-center p-2 rounded-full px-4'>Login</button>
           <RegisterForm/>
