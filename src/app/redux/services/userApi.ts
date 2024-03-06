@@ -41,10 +41,10 @@ export const userApi = createApi({
       query:({id}) => `user/${id}`
     }),
     registerUser:mutation<Register,Register>({
-      query:(userData)=> ({
+      query:({username,email,password})=> ({
         url:'auth/register',
         method:'POST',
-        body:userData
+        body:{username,email,password}
       })
     }),
     loginUser:mutation<Login,Login>({
@@ -56,3 +56,5 @@ export const userApi = createApi({
     })
   })
 })
+
+export const { useGetUsersQuery,useGetUserByIdQuery, useRegisterUserMutation, useLoginUserMutation } = userApi;
