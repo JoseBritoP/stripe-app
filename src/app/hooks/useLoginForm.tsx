@@ -4,10 +4,8 @@ import { useState } from "react";
 import { useFormik } from "formik";
 import { loginScheme } from "../schemes/LoginScheme";
 import z from 'zod'
-// import { loginRequest } from "@/src/app/server/authEndpoints";
-// import { useNavigate } from "react-router-dom";
 import { useRouter } from "next/navigation";
-
+import { loginUser } from "../services/users";
 type LoginValues = z.infer<typeof loginScheme>
 
 const useLogin = () => {
@@ -25,13 +23,16 @@ const useLogin = () => {
     onSubmit: async (values) => {
       const { email, password } = values;
       try {
+        const response = await loginUser({email,password});
+        const session = response?.data; // Suponiendo que response.data contiene los datos del usuario
+        localStorage.setItem('session', JSON.stringify(session)); // Guarda los datos del usuario en localStorage
         console.log('Login exitoso');
+        setMessage(response?.data.message);
         setError(false)
         setSubmit(true)
-       
+        // const res = await useRegisterUserMutation({email,password})
         setTimeout(()=>{
-          // response.data.userType === 'client' ? navigate('/proyects') : navigate('/admin')
-          // navigate('/proyects')
+          // navigate('/posts')
           router.push('/')
         },1000)
       } catch (error:any) {

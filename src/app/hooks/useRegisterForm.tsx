@@ -2,7 +2,10 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useFormik } from 'formik';
+import { useAppDispatch,useAppSelector } from '@/app/redux/hooks'
+import { useRegisterUserMutation } from "../redux/services/userApi";
 import { registerScheme } from '@/app/schemes/RegisterScheme';
+import { registerUser } from '../services/users';
 import z from 'zod';
 
 type RegisterValues = z.infer<typeof registerScheme>;
@@ -13,12 +16,22 @@ const useRegister = () => {
   const [error, setError] = useState(false);
   const [submit,setSubmit] = useState(false);
 
-  const router = useRouter()
+  const router = useRouter();
 
   const formik = useFormik<RegisterValues>({
     initialValues: { username:'',email: '', password: '', repeatPassword: '' },
-    onSubmit: async (values) => {
-      console.log(values)
+    onSubmit: async ({username,email,password}) => {
+      try {
+        const res = await registerUser({username,email,password})
+        console.log(res)
+        setMessage(res?.data.message)
+        setError(false)
+        setSubmit(true)
+      } catch (error:any) {
+        setMessage(error.message)
+        setError(false)
+        setSubmit(true)
+      }
     },
 
     validate: (values) => {
@@ -39,6 +52,7 @@ const useRegister = () => {
   if(submit === true){
     setTimeout(()=>{
       setSubmit(false)
+      router.push('/')
     },2000)
   }
 
