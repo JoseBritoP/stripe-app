@@ -7,14 +7,6 @@ export const navbarLinks = [
     route:'/auth',
     label:'Sesión'
   },
-  {
-    route:'/about',
-    label:'About Us'
-  },
-  {
-    route:'/posts',
-    label:'Posts'
-  }
 ]
 
 export const navbarLinksLogin = [
@@ -23,17 +15,13 @@ export const navbarLinksLogin = [
     label:'Home'
   },
   {
-    route:'/tasks',
-    label:'Tasks'
+    route:'/posts',
+    label:'Post'
   },
   {
-    route:'/about',
-    label:'About Us'
-  },
-  {
-    route:'/newpost',
-    label:'Create Post'
-  },
+    route:'/premium',
+    label:'Premium'
+  }
 ]
 
 export const navbarPost = [
