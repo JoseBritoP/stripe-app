@@ -1,3 +1,5 @@
+"use client"
+import { useState } from 'react'
 import useLogin from '../../hooks/useLoginForm'
 import z from 'zod'
 import { loginScheme } from '@/app/schemes/LoginScheme'
@@ -6,11 +8,16 @@ import AlertComponent from '../shared/Alert'
 type Login = z.infer<typeof loginScheme>
 
 const LoginForm = () => {
+  const [state,setState] = useState('password');
   const { formik, message, error, submit,
     // handleLoginChange,value 
   } = useLogin();
+
+  const handlePasswordState = () => {
+    setState((prevState) => prevState === 'password' ? 'text' : 'password');
+  }
   return (
-    <form action="" className="my-10 bg-white shadow rounded-lg px-5 py-2 pb-4 border-2 dark:bg-slate-950 dark:border-gray-700 dark:border-2 w-full" onSubmit={formik.handleSubmit}>
+    <form action="" className="my-10shadow rounded-lg px-5 py-2 pb-4 border-2 dark:bg-slate-950 dark:border-gray-700 dark:border-2 w-full" onSubmit={formik.handleSubmit}>
       {/* email */}
       <div className="my-5">
           <label htmlFor="email" className="uppercase text-gray-600 block text-xl font-bold dark:text-gray-200 hover:cursor-pointer">Email</label>
@@ -29,15 +36,16 @@ const LoginForm = () => {
       <div className="my-5">
         <label htmlFor="password" className="uppercase text-gray-600 block text-xl font-bold dark:text-gray-200 hover:cursor-pointer"> Password</label>
         <input
-          type="password"
+          type={state}
           name="password"
           id="password"
-          placeholder="password"
+          placeholder="Password"
           className="w-full mt-3 p-3 border rounded-xl bg-gray-50 border-black dark:border-gray-500 dark:bg-gray-900 dark:placeholder:text-gray-300 dark:text-slate-100"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.password}
         />
+        <button className='text-sm text-slate-600 px-4 pt-2 text-center' onClick={handlePasswordState}>Show password</button>
         {formik.touched.password && formik.errors.password && (
           <p className="text-red-500 font-semibold pt-2 dark:text-red-600">{formik.errors.password}</p>
         )}
