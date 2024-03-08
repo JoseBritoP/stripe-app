@@ -8,7 +8,6 @@ export default function CheckoutButton({priceId}:{priceId:string}) {
   const { profile } = useAuthStore();
   
   const handleCheckout = async (priceId:string) => {
-    // TODO: Agree userId to premium
     const response = await axios.post('/api/v1/checkout',{
       priceId,
       userId:profile.id
