@@ -7,6 +7,6 @@ export async function POST(req:NextRequest) {
     const checkout = await stripeCheckout(data);
     return NextResponse.json(checkout,{status:200,statusText:'Checkout'})
   } catch (error:any) {
-    return NextResponse.json({error:error.message},{status:200})
+    return NextResponse.json({error:error.message},{status:400,statusText:'Bad Request'})
   }
 }
