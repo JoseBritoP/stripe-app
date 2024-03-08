@@ -13,6 +13,7 @@ export const pricesList = async () => {
 };
 
 export const stripeCheckout = async ({priceId}:{priceId:string}) => {
+  // TODO: Agree userId to premium = true
   if(STRIPE_API_KEY === undefined) throw new Error('Api key missing');
   const stripe = new Stripe(`${STRIPE_API_KEY}`)
 

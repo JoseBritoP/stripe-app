@@ -5,6 +5,7 @@ import axios from 'axios';
 export default function CheckoutButton({priceId}:{priceId:string}) {
 
   const handleCheckout = async (priceId:string) => {
+    // TODO: Agree userId to premium
     const response = await axios.post('/api/v1/checkout',{
       priceId
     })

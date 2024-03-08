@@ -11,7 +11,7 @@ const Navbar = () => {
 //   const sessionString = localStorage.getItem('session');
 // // Convertir los datos del usuario de cadena JSON a objeto
 //   const session = sessionString && JSON.parse(sessionString)
-
+  // TODO: Fix navbar login-logout
   const handleLogout = () => {
     localStorage.clear()
     router.push('/auth')
