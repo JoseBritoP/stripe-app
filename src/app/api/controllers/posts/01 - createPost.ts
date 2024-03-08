@@ -7,10 +7,18 @@ export const createPost = async(data:NewPost) => {
   const author = await prisma.user.findUnique({
     where:{
       id:+data.userId
+    },
+    select:{
+      id:true,
+      username:true,
+      premium:true,
+      posts:true
     }
   });
 
   if(!author) throw new Error(`The author don't exist`);
+
+  if(author.posts.length > 3 && !author.premium) throw new Error(`The user isn't premium`)
 
   const newPost = await prisma.post.create({
     data:{
@@ -29,6 +37,22 @@ export const createPost = async(data:NewPost) => {
 };
 
 export const createPostWithCategories = async (data:NewPostV2) => {
+
+  const author = await prisma.user.findUnique({
+    where:{
+      id:+data.userId
+    },
+    select:{
+      id:true,
+      username:true,
+      premium:true,
+      posts:true
+    }
+  });
+
+  if(!author) throw new Error(`The author don't exist`);
+
+  if(author.posts.length > 3 && !author.premium) throw new Error(`The user isn't premium`)
 
   // Transforma los IDs de categorías en un formato adecuado para el connect  [{id:1},{id:2}]
   const categoriesToConnect = data.categories && data.categories.map((categoryId) => {
