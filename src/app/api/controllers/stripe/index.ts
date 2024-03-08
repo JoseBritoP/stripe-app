@@ -1,3 +1,4 @@
+import { prisma } from '@/app/config/db';
 import { Stripe } from 'stripe';
 
 const { STRIPE_API_KEY } = process.env
@@ -12,8 +13,31 @@ export const pricesList = async () => {
   return prices.data
 };
 
-export const stripeCheckout = async ({priceId}:{priceId:string}) => {
+export const stripeCheckout = async ({priceId,userId}:{priceId:string,userId:string}) => {
   // TODO: Agree userId to premium = true
+  // const user = await prisma.user.findUnique({
+  //   where:{
+  //     id:+userId
+  //   }
+  // });
+
+  // if(!user) throw new Error(`User don't found`);
+  const userUpdated = await prisma.user.update({
+    where:{
+      id:+userId
+    },
+    data:{
+      premium: true
+    },
+    select:{
+      id:true,
+      username:true,
+      email:true,
+      premium:true
+    }
+  })
+  if(!userUpdated) throw new Error(`User don't found`);
+
   if(STRIPE_API_KEY === undefined) throw new Error('Api key missing');
   const stripe = new Stripe(`${STRIPE_API_KEY}`)
 
