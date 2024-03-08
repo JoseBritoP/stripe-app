@@ -5,7 +5,9 @@ import { useFormik } from "formik";
 import { loginScheme } from "../schemes/LoginScheme";
 import z from 'zod'
 import { useRouter } from "next/navigation";
-import { loginUser } from "../services/users";
+import { loginUser } from "../server/users";
+import { useAuthStore } from "../services/authStore";
+
 type LoginValues = z.infer<typeof loginScheme>
 
 const useLogin = () => {
@@ -14,6 +16,9 @@ const useLogin = () => {
   const [error, setError] = useState(false);
   const [submit,setSubmit] = useState(false);
   const [login,setLogin] =useState('email');
+
+  const { setProfile } = useAuthStore();
+
   const handleLoginChange = () => {
     setLogin((prevLogin)=>(prevLogin === 'email' ? 'user' : 'email'))
   }
@@ -24,9 +29,11 @@ const useLogin = () => {
       const { email, password } = values;
       try {
         const response = await loginUser({email,password});
-        const session = response?.data; // Suponiendo que response.data contiene los datos del usuario
-        localStorage.setItem('session', JSON.stringify(session)); // Guarda los datos del usuario en localStorage
-        console.log('Login exitoso');
+        setProfile({
+          id:response?.data.id,
+          username:response?.data.username,
+          email:response?.data.email
+        })
         setMessage(response?.data.message);
         setError(false)
         setSubmit(true)
