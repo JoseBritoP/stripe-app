@@ -5,7 +5,7 @@ import { useFormik } from 'formik';
 import { useAppDispatch,useAppSelector } from '@/app/redux/hooks'
 import { useRegisterUserMutation } from "../redux/services/userApi";
 import { registerScheme } from '@/app/schemes/RegisterScheme';
-import { registerUser } from '../services/users';
+import { registerUser } from '../server/users';
 import z from 'zod';
 
 type RegisterValues = z.infer<typeof registerScheme>;
