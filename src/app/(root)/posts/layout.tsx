@@ -4,9 +4,9 @@ import React from 'react'
 
 export default function Postlayout({children}:{children:React.ReactNode}) {
   return (
-    <div className=''>
+    <main className='h-full w-full border-2 px-10 pb-10'>
       <NavbarPost/>
       {children}
-    </div>
+    </main>
   )
 }

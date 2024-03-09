@@ -48,7 +48,7 @@ export const postApi = createApi({
     getPost:query<PostType,{id:string}>({
       query:({id}) => `post/${id}`
     }),
-    loginUser:mutation<CreatePostResponse,CreatePost>({
+    createPost:mutation<CreatePostResponse,CreatePost>({
       query:(postData)=> ({
         url:'post',
         method:'POST',

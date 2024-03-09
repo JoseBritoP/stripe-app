@@ -8,7 +8,7 @@ export default function NavbarPost() {
 
   return (
     <header className="dark:bg-gradient-to-b from-slate-950 px-4 py-6 border-b-2 dark:border-slate-700">
-      <nav className="flex w-full justify-center gap-x-4">
+      <nav className="flex h-full w-full justify-center p-4 gap-x-4">
         <ul className="flex gap-x-5 text-lg">
           {navbarPost.map((link)=>{
             const isActive = (pathname.includes(link.route) && link.route.length > 0) || pathname === link.route;

@@ -26,15 +26,15 @@ export const navbarLinksLogin = [
 
 export const navbarPost = [
   {
-    route:'/',
+    route:'/posts',
     label:'Posts'
   },
   {
-    route:'/newpost',
+    route:'/posts/newpost',
     label:'Create Post'
   },
   {
-    route:'/favorites',
+    route:'posts/favorites',
     label:'Favorites'
   }
 ];

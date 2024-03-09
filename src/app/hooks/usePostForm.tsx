@@ -2,11 +2,11 @@
 import { useState} from 'react'
 import { useRouter } from 'next/navigation'
 import { useFormik } from 'formik';
-import { postScheme } from '../schemes/PostScheme';
+import { postScheme, postSchemeV2 } from '../schemes/PostScheme';
 import z from 'zod';
 
 
-type PostValues = z.infer<typeof postScheme>
+type PostValues = z.infer<typeof postSchemeV2>
 export default function usePostForm() {
   const [message, setMessage] = useState('');
   const [error, setError] = useState(false);
@@ -15,7 +15,7 @@ export default function usePostForm() {
   const router = useRouter();
 
   const formik = useFormik<PostValues>({
-    initialValues: { title:'',content:'',userId:-1 },
+    initialValues: { title:'',content:'',userId:-1,categories:[] },
     onSubmit: async (values) => {
       console.log(values)
     },
